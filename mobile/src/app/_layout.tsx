@@ -10,7 +10,7 @@ import {
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ActivityIndicator, View } from 'react-native';
+
 
 import { useAuthStore } from '@/features/auth/store/authStore';
 import '../global.css';
@@ -31,7 +31,7 @@ export default function RootLayout() {
   const { isLoading, initSession } = useAuthStore();
 
   // Load fonts
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
@@ -45,17 +45,13 @@ export default function RootLayout() {
 
   // Hide splash screen once loaded
   useEffect(() => {
-    if (fontsLoaded && !isLoading) {
+    if ((fontsLoaded || fontError) && !isLoading) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isLoading]);
+  }, [fontsLoaded, fontError, isLoading]);
 
-  if (!fontsLoaded || isLoading) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#F472B6" />
-      </View>
-    );
+  if (!fontsLoaded && !fontError) {
+    return null;
   }
 
   return (
@@ -68,3 +64,4 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
