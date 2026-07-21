@@ -43,6 +43,12 @@ class User(Base, TimestampMixin, UUIDMixin):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    products: Mapped[list["Product"]] = relationship(
+        "Product",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
 
 
     def __repr__(self) -> str:

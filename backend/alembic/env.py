@@ -12,6 +12,8 @@ from app.core.config import settings
 from app.common.base_model import Base
 from app.auth.models import User  # Must import so models register on Base
 from app.collections.models import Collection
+from app.products.models import Product
+
 
 
 # this is the Alembic Config object, which provides

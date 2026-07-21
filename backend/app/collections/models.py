@@ -43,6 +43,8 @@ class Collection(Base, TimestampMixin, UUIDMixin):
 
     # Relationships
     user: Mapped["User"] = relationship(back_populates="collections")
+    products: Mapped[list["Product"]] = relationship("Product", back_populates="collection")
+
     # products: Mapped[list["Product"]] = relationship(back_populates="collection", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
