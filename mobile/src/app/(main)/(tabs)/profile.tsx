@@ -4,12 +4,12 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Image,
   Alert,
   Switch,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { LogOut, User, FolderHeart, Sliders, Moon, Trash2, ArrowRight } from 'lucide-react-native';
+import { LogOut, User, Moon, Trash2, ArrowRight } from 'lucide-react-native';
+
 import * as Haptics from 'expo-haptics';
 
 import { useAuthStore } from '@/features/auth/store/authStore';

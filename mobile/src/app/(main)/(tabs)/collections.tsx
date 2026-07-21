@@ -9,7 +9,8 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { Plus, MoreVertical, FolderOpen, Edit3, Trash2 } from 'lucide-react-native';
+import { Plus, MoreVertical, FolderOpen } from 'lucide-react-native';
+
 import { useRouter } from 'expo-router';
 
 import {
@@ -142,7 +143,7 @@ export default function CollectionsScreen() {
           </View>
           <Text className="text-xl font-bold text-gray-900 mb-1">No Collections Yet</Text>
           <Text className="text-gray-400 text-center text-sm mb-6 max-w-[260px] leading-relaxed">
-            Create your first collection like "Fashion", "Gaming Setup", or "Dream Purchases".
+            Create your first collection like &quot;Fashion&quot;, &quot;Gaming Setup&quot;, or &quot;Dream Purchases&quot;.
           </Text>
           <TouchableOpacity
             onPress={handleOpenCreate}

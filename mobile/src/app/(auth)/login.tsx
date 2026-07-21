@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -138,7 +139,7 @@ export default function LoginScreen() {
 
           {/* Registration Link */}
           <View className="flex-row justify-center items-center mt-4">
-            <Text className="text-gray-500 text-sm">Don't have an account? </Text>
+            <Text className="text-gray-500 text-sm">Don&apos;t have an account? </Text>
             <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
               <Text className="text-primary font-semibold text-sm">Create Account</Text>
             </TouchableOpacity>

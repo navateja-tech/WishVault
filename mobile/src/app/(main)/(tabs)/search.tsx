@@ -8,7 +8,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { Search as SearchIcon, Tag, SlidersHorizontal, ShoppingBag, X } from 'lucide-react-native';
+import { Search as SearchIcon, SlidersHorizontal, ShoppingBag, X } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 
 import { useProductsQuery } from '@/features/products/hooks/useProducts';
@@ -247,7 +247,7 @@ export default function SearchScreen() {
           </View>
           <Text className="text-xl font-bold text-gray-900 mb-1">No Matches Found</Text>
           <Text className="text-gray-400 text-center text-sm mb-6 max-w-[260px]">
-            We couldn't find items matching your filters or search keywords.
+            We couldn&apos;t find items matching your filters or search keywords.
           </Text>
           {(query !== '' || selectedCollectionId !== 'all' || selectedPriceRange !== 'all') && (
             <TouchableOpacity

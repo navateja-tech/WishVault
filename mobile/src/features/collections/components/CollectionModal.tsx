@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -52,14 +52,20 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
   const [selectedColor, setSelectedColor] = useState(initialValues?.color || colors.collection[0]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const [prevVisible, setPrevVisible] = useState(false);
+  const [prevInitialValues, setPrevInitialValues] = useState(initialValues);
+
+  if (visible !== prevVisible || initialValues !== prevInitialValues) {
+    setPrevVisible(visible);
+    setPrevInitialValues(initialValues);
     if (visible) {
       setName(initialValues?.name || '');
       setSelectedIcon(initialValues?.icon || 'gamepad');
       setSelectedColor(initialValues?.color || colors.collection[0]);
       setError(null);
     }
-  }, [visible, initialValues]);
+  }
+
 
   const handleSubmit = async () => {
     if (!name.trim()) {

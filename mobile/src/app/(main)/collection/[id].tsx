@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, FolderOpen, Grid } from 'lucide-react-native';
+import { ArrowLeft, FolderOpen } from 'lucide-react-native';
 
 import { useCollectionsQuery } from '@/features/collections/hooks/useCollections';
 import { useProductsQuery } from '@/features/products/hooks/useProducts';

@@ -6,12 +6,12 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
   Image,
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, Clipboard, Link2, Check } from 'lucide-react-native';
+import { ArrowLeft, Clipboard, Link2 } from 'lucide-react-native';
+
 import * as ClipboardAPI from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 
@@ -56,7 +56,7 @@ export default function AddProductScreen() {
       const res = await extractMutation.mutateAsync({ url: url.trim() });
       setExtractedData(res);
       setCustomTitle(res.title);
-    } catch (err: any) {
+    } catch {
       Alert.alert('Scraping Fallback', 'We could not fetch all web metadata, but you can save it with standard URL details.');
     }
   };
@@ -185,7 +185,7 @@ export default function AddProductScreen() {
               {collections.length === 0 ? (
                 <View className="bg-gray-50 border border-gray-100 rounded-xl p-4 items-center">
                   <Text className="text-gray-500 text-sm text-center mb-3">
-                    You don't have any collections yet.
+                    You don&apos;t have any collections yet.
                   </Text>
                   <Button
                     title="Create Collection"

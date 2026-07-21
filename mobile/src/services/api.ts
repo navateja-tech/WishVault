@@ -65,7 +65,7 @@ async function request(path: string, options: RequestOptions = {}): Promise<any>
           const freshTokens = await refreshSession();
           isRefreshing = false;
           onRefreshed(freshTokens.access_token);
-        } catch (refreshErr) {
+        } catch {
           isRefreshing = false;
           await state.clearSession();
           throw new ApiError(401, 'Session expired. Please log in again.');
@@ -95,7 +95,7 @@ async function handleResponse(response: Response) {
   let data;
   try {
     data = text ? JSON.parse(text) : {};
-  } catch (e) {
+  } catch {
     data = { message: text };
   }
 

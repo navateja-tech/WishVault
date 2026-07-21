@@ -8,21 +8,19 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
-  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Plus, Search, Grid, List, Sparkles, FolderHeart } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 
 import { useProductsQuery } from '@/features/products/hooks/useProducts';
-import { useCollectionsQuery } from '@/features/collections/hooks/useCollections';
 import { ProductItem } from '@/features/products/api/productsApi';
 import { Card } from '@/components/ui/Card';
 
 export default function DashboardScreen() {
   const router = useRouter();
   const { data: products = [], isLoading, isRefetching, refetch } = useProductsQuery();
-  const { data: collections = [] } = useCollectionsQuery();
+
 
   const [isGridView, setIsGridView] = useState(true);
 

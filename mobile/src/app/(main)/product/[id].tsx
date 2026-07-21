@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -38,13 +38,14 @@ export default function ProductDetailScreen() {
   const [notes, setNotes] = useState('');
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [showCollectionPicker, setShowCollectionPicker] = useState(false);
+  const [prevProductId, setPrevProductId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (product) {
-      setNotes(product.notes || '');
-      setSelectedCollectionId(product.collection_id);
-    }
-  }, [product]);
+  if (product && product.id !== prevProductId) {
+    setPrevProductId(product.id);
+    setNotes(product.notes || '');
+    setSelectedCollectionId(product.collection_id);
+  }
+
 
   const handleOpenStore = async () => {
     if (!product?.url) return;
