@@ -1,12 +1,16 @@
-import { Stack, Redirect } from 'expo-router';
+import { useEffect } from 'react';
+import { Stack, useRouter } from 'expo-router';
 import { useAuthStore } from '@/features/auth/store/authStore';
 
 export default function AuthLayout() {
   const { isAuthenticated, isLoading } = useAuthStore();
+  const router = useRouter();
 
-  if (!isLoading && isAuthenticated) {
-    return <Redirect href="/(main)/(tabs)" />;
-  }
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.replace('/(main)/(tabs)');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   return (
     <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
@@ -15,3 +19,4 @@ export default function AuthLayout() {
     </Stack>
   );
 }
+

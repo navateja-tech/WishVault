@@ -1,12 +1,16 @@
-import { Stack, Redirect } from 'expo-router';
+import { useEffect } from 'react';
+import { Stack, useRouter } from 'expo-router';
 import { useAuthStore } from '@/features/auth/store/authStore';
 
 export default function MainLayout() {
   const { isAuthenticated, isLoading } = useAuthStore();
+  const router = useRouter();
 
-  if (!isLoading && !isAuthenticated) {
-    return <Redirect href="/(auth)/login" />;
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/(auth)/login');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -21,3 +25,4 @@ export default function MainLayout() {
     </Stack>
   );
 }
+
