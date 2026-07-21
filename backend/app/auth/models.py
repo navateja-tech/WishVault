@@ -37,9 +37,13 @@ class User(Base, TimestampMixin, UUIDMixin):
         nullable=True,
     )
 
-    # Relationships will be added here as we implement other domains:
-    # collections: Mapped[list["Collection"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    # products: Mapped[list["Product"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    # Relationships
+    collections: Mapped[list["Collection"]] = relationship(
+        "Collection",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
 
     def __repr__(self) -> str:
         return f"<User {self.username} ({self.email})>"

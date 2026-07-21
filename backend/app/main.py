@@ -35,9 +35,12 @@ def create_app() -> FastAPI:
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-    # Include Auth Routers
+    # Include Routers
     from app.auth.router import router as auth_router
+    from app.collections.router import router as collections_router
     app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(collections_router, prefix="/api/v1")
+
 
     # Health check
     @app.get("/health", tags=["Health"])
