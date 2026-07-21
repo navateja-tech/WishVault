@@ -21,8 +21,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     ENVIRONMENT: str = "development"
 
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://univault:univault@localhost:5432/univault"
+    # Database (Default to local SQLite database for instant development)
+    DATABASE_URL: str = "sqlite+aiosqlite:///./univault.db"
 
     # JWT
     JWT_SECRET_KEY: str = "change-this-to-a-random-secret-in-production"

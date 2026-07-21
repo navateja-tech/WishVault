@@ -1,8 +1,14 @@
 import { useEffect } from 'react';
-import { Stack, Slot, useRouter, useSegments } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ActivityIndicator, View } from 'react-native';
 
@@ -21,10 +27,8 @@ const queryClient = new QueryClient({
   },
 });
 
-function RootLayoutNav() {
-  const { isAuthenticated, isLoading, initSession } = useAuthStore();
-  const segments = useSegments();
-  const router = useRouter();
+export default function RootLayout() {
+  const { isLoading, initSession } = useAuthStore();
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -38,21 +42,6 @@ function RootLayoutNav() {
   useEffect(() => {
     initSession();
   }, [initSession]);
-
-  // Handle routing based on auth state
-  useEffect(() => {
-    if (isLoading || !fontsLoaded) return;
-
-    const inAuthGroup = segments[0] === '(auth)';
-
-    if (!isAuthenticated && !inAuthGroup) {
-      // Redirect to login if not authenticated and trying to access main app
-      router.replace('/(auth)/login');
-    } else if (isAuthenticated && inAuthGroup) {
-      // Redirect to dashboard if authenticated and trying to access login/register
-      router.replace('/(main)/(tabs)');
-    }
-  }, [isAuthenticated, isLoading, fontsLoaded, segments, router]);
 
   // Hide splash screen once loaded
   useEffect(() => {
@@ -70,17 +59,11 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(main)" options={{ headerShown: false }} />
-    </Stack>
-  );
-}
-
-export default function RootLayout() {
-  return (
     <QueryClientProvider client={queryClient}>
-      <RootLayoutNav />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(main)" options={{ headerShown: false }} />
+      </Stack>
       <StatusBar style="dark" />
     </QueryClientProvider>
   );

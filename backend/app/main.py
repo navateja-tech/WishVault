@@ -1,10 +1,26 @@
 """
 UniVault Backend — FastAPI Application
 """
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.core.database import engine
+from app.common.base_model import Base
+
+# Ensure all models are registered on Base for table creation
+import app.auth.models  # noqa
+import app.collections.models  # noqa
+import app.products.models  # noqa
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for table initialization and shutdown."""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
 
 
 def create_app() -> FastAPI:
@@ -15,6 +31,7 @@ def create_app() -> FastAPI:
         version="0.1.0",
         docs_url="/docs",
         redoc_url="/redoc",
+        lifespan=lifespan,
     )
 
     # CORS middleware
@@ -43,8 +60,6 @@ def create_app() -> FastAPI:
     app.include_router(collections_router, prefix="/api/v1")
     app.include_router(products_router, prefix="/api/v1")
 
-
-
     # Health check
     @app.get("/health", tags=["Health"])
     async def health_check():
@@ -54,4 +69,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-

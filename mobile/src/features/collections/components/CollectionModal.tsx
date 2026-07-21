@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Modal,
   View,
   Text,
   TouchableOpacity,
@@ -80,11 +79,20 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
     }
   };
 
+  if (!visible) return null;
+
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+    <View className="absolute inset-0 z-50 bg-black/40 justify-end">
+      {/* Dimmed Backdrop Dismiss Touch Area */}
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={onClose}
+        className="absolute inset-0"
+      />
+
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1 justify-end bg-black/40"
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        className="justify-end z-10"
       >
         <View className="bg-white rounded-t-3xl p-6 shadow-xl max-h-[85%]">
           {/* Header */}
@@ -172,6 +180,6 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
           </View>
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+    </View>
   );
 };

@@ -1,9 +1,10 @@
 """
 Database engine and async session configuration.
 
-Uses SQLAlchemy 2.x async API with asyncpg driver.
+Supports SQLite (local dev) and PostgreSQL (production).
 """
 from collections.abc import AsyncGenerator
+from typing import Any
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -13,14 +14,18 @@ from sqlalchemy.ext.asyncio import (
 
 from app.core.config import settings
 
+# Engine configuration kwargs
+engine_kwargs: dict[str, Any] = {"echo": settings.DEBUG}
+
+if settings.DATABASE_URL.startswith("sqlite"):
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    engine_kwargs["pool_size"] = 20
+    engine_kwargs["max_overflow"] = 10
+    engine_kwargs["pool_pre_ping"] = True
+
 # Create async engine
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=settings.DEBUG,
-    pool_size=20,
-    max_overflow=10,
-    pool_pre_ping=True,
-)
+engine = create_async_engine(settings.DATABASE_URL, **engine_kwargs)
 
 # Session factory
 async_session_factory = async_sessionmaker(

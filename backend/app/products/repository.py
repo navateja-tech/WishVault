@@ -70,9 +70,9 @@ class ProductRepository:
 
     async def update(self, product: Product, data: ProductUpdate) -> Product:
         """Update product notes or collection."""
-        if data.notes is not None:
+        if "notes" in data.model_fields_set:
             product.notes = data.notes
-        if data.collection_id is not None:
+        if "collection_id" in data.model_fields_set:
             product.collection_id = data.collection_id
         await self.session.flush()
         return product

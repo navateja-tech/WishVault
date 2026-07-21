@@ -1,3 +1,4 @@
+import * as SecureStore from 'expo-secure-store';
 import { useAuthStore } from '@/features/auth/store/authStore';
 
 // Access EXPO_PUBLIC_API_URL or default to localhost
@@ -107,26 +108,10 @@ async function handleResponse(response: Response) {
 }
 
 async function refreshSession(): Promise<{ access_token: string; refresh_token: string }> {
-  // Retrieve refresh token from SecureStore or state
   const state = useAuthStore.getState();
-  // Fetch refresh token from secure store via authStore structure, or if we need a direct SecureStore read:
   const tokenUrl = `${API_BASE_URL}/auth/refresh`;
-  
-  // Since tokens are stored in SecureStore via authStore keys, we load the refresh token
-  // For safety, let's grab it via secure store import
-  const SecureStore = require('expo-secure-store');
+
   const userStr = await SecureStore.getItemAsync('univault_user_data');
-  const refreshToken = await SecureStore.getItemAsync('univault_access_token'); // In our authStore setSession we save the access token, let's verify what keys we used.
-  
-  // Wait, let's check what we did in `authStore.ts` setSession:
-  // we did:
-  // await SecureStore.setItemAsync('univault_access_token', token);
-  // await SecureStore.setItemAsync('univault_user_data', JSON.stringify(user));
-  // Wait! In Milestone 1, we returned both `access_token` and `refresh_token`.
-  // But in our Zustand store, we didn't save the `refresh_token` to SecureStore yet!
-  // Let's make sure our Zustand store saves both access_token and refresh_token so that we can refresh correctly!
-  // Let's read the store's current logic and modify it if needed.
-  // Actually, let's check what tokens we store: we should store refresh_token in SecureStore as 'univault_refresh_token'.
   const savedRefreshToken = await SecureStore.getItemAsync('univault_refresh_token');
 
   if (!savedRefreshToken) {
@@ -145,10 +130,9 @@ async function refreshSession(): Promise<{ access_token: string; refresh_token: 
 
   const tokens = await response.json();
   const user = userStr ? JSON.parse(userStr) : state.user;
-  
+
   // Save new session
-  await state.setSession(tokens.access_token, user);
-  await SecureStore.setItemAsync('univault_refresh_token', tokens.refresh_token);
+  await state.setSession(tokens.access_token, user, tokens.refresh_token);
 
   return tokens;
 }
