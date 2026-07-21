@@ -32,6 +32,27 @@ export function useSaveProductMutation() {
   });
 }
 
+export function useProductQuery(id: string) {
+  return useQuery({
+    queryKey: [...PRODUCTS_QUERY_KEY, 'detail', id],
+    queryFn: () => productsApi.getById(id),
+    enabled: !!id,
+  });
+}
+
+export function useUpdateProductMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { notes?: string | null; collection_id?: string | null } }) =>
+      productsApi.update(id, data),
+    onSuccess: (updatedProduct) => {
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: [...PRODUCTS_QUERY_KEY, 'detail', updatedProduct.id] });
+      queryClient.invalidateQueries({ queryKey: COLLECTIONS_QUERY_KEY });
+    },
+  });
+}
+
 export function useDeleteProductMutation() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -42,3 +63,4 @@ export function useDeleteProductMutation() {
     },
   });
 }
+

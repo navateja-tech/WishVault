@@ -65,7 +65,7 @@ export const productsApi = {
     return await api.post('/products', data);
   },
 
-  update: async (id: string, data: { notes?: string; collection_id?: string | null }): Promise<ProductItem> => {
+  update: async (id: string, data: { notes?: string | null; collection_id?: string | null }): Promise<ProductItem> => {
     return await api.patch(`/products/${id}`, data);
   },
 
