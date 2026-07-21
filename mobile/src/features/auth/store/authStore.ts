@@ -14,12 +14,13 @@ interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  setSession: (token: string, user: User) => Promise<void>;
+  setSession: (token: string, user: User, refreshToken?: string) => Promise<void>;
   clearSession: () => Promise<void>;
   initSession: () => Promise<void>;
 }
 
 const TOKEN_KEY = 'univault_access_token';
+const REFRESH_TOKEN_KEY = 'univault_refresh_token';
 const USER_KEY = 'univault_user_data';
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -28,10 +29,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: true,
 
-  setSession: async (token: string, user: User) => {
+  setSession: async (token: string, user: User, refreshToken?: string) => {
     try {
       await SecureStore.setItemAsync(TOKEN_KEY, token);
       await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+      if (refreshToken) {
+        await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
+      }
       set({ accessToken: token, user, isAuthenticated: true, isLoading: false });
     } catch (error) {
       console.error('Error saving session', error);
@@ -41,12 +45,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearSession: async () => {
     try {
       await SecureStore.deleteItemAsync(TOKEN_KEY);
+      await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
       await SecureStore.deleteItemAsync(USER_KEY);
       set({ accessToken: null, user: null, isAuthenticated: false, isLoading: false });
     } catch (error) {
       console.error('Error clearing session', error);
     }
   },
+
 
   initSession: async () => {
     try {
